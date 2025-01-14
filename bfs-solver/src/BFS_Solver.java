@@ -23,15 +23,11 @@ public class BFS_Solver {
             );
             Solver solver = new Solver();
 
-            System.out.println(board.toString());
             outputBoard.write(board.toString());
             solver.GenerateSolutionTree(board);
             SolutionTree solution = solver.solution;
             SudokuBoard solvedBoard = solver.TraverseSolutionTree(solution.root) == null ? board
                     : solver.TraverseSolutionTree(solution.root);
-            System.out.println(board.toString());
-
-            System.out.println(solution.toString());
 
             outputBoard.write(solvedBoard.toString());
             outputTree.write(solution.toString());
