@@ -1,23 +1,40 @@
 
-import java.util.List;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BFS_Solver {
 
     public static void main(String[] args) throws Exception {
-        SudokuBoard board = new SudokuBoard(
-                List.of(
-                        List.of(1, 2, 3, 4, 5, 6, 7, 8, 9),
-                        List.of(4, 5, 6, 7, 8, 9, 1, 2, 3),
-                        List.of(7, 8, 9, 1, 2, 3, 4, 5, 6),
-                        List.of(2, 3, 4, 5, 6, 7, 8, 9, 1),
-                        List.of(5, 6, 7, 8, 9, 1, 2, 3, 4),
-                        List.of(8, 9, 1, 2, 3, 4, 5, 6, 7),
-                        List.of(3, 4, 5, 6, 7, 8, 9, 1, 2),
-                        List.of(6, 7, 8, 9, 1, 2, 3, 4, 5),
-                        List.of(9, 1, 2, 3, 4, 5, 6, 7, 8)
-                )
-        );
+        try (
+                FileWriter outputBoard = new FileWriter("OUTPUT.txt"); FileWriter outputTree = new FileWriter("OUTPUT_TREE.txt")) {
+            SudokuBoard board = new SudokuBoard(
+                    Arrays.asList(
+                            new ArrayList<>(Arrays.asList(0, 0, 3, 4, 5, 6, 7, 8, 9)),
+                            new ArrayList<>(Arrays.asList(4, 0, 6, 0, 0, 9, 0, 0, 3)),
+                            new ArrayList<>(Arrays.asList(7, 0, 0, 1, 0, 0, 0, 5, 0)),
+                            new ArrayList<>(Arrays.asList(2, 0, 0, 0, 0, 7, 0, 0, 0)),
+                            new ArrayList<>(Arrays.asList(5, 6, 0, 8, 0, 0, 0, 0, 0)),
+                            new ArrayList<>(Arrays.asList(8, 9, 1, 0, 0, 0, 5, 0, 7)),
+                            new ArrayList<>(Arrays.asList(3, 4, 0, 0, 7, 0, 9, 0, 0)),
+                            new ArrayList<>(Arrays.asList(6, 0, 0, 0, 0, 0, 0, 0, 0)),
+                            new ArrayList<>(Arrays.asList(9, 1, 2, 3, 0, 5, 6, 7, 8))
+                    )
+            );
+            Solver solver = new Solver();
 
-        System.out.println(board.toString());
+            System.out.println(board.toString());
+            outputBoard.write(board.toString());
+            solver.GenerateSolutionTree(board);
+            SolutionTree solution = solver.solution;
+            SudokuBoard solvedBoard = solver.TraverseSolutionTree(solution.root) == null ? board
+                    : solver.TraverseSolutionTree(solution.root);
+            System.out.println(board.toString());
+
+            System.out.println(solution.toString());
+
+            outputBoard.write(solvedBoard.toString());
+            outputTree.write(solution.toString());
+        }
     }
 }
